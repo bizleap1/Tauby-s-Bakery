@@ -1,26 +1,54 @@
 @import "tailwindcss";
 
+@theme {
+  --font-heading: var(--font-playfair), serif;
+  --font-body: var(--font-poppins), sans-serif;
+
+  /* Tauby's Logo Color Palette */
+  --color-cream: #FFFDF5;           /* Warm white background */
+  --color-red-primary: #D32F2F;     /* Logo crimson red */
+  --color-red-deep: #7B1A1A;        /* Logo dark maroon */
+  --color-red-light: #FFCDD2;       /* Light red tint */
+  --color-gold: #F5C518;            /* Logo golden yellow */
+  --color-gold-deep: #E0A800;       /* Darker gold accent */
+  --color-gold-light: #FFF9C4;      /* Light gold tint */
+  --color-dark: #1A0A0A;            /* Near-black for text */
+  --color-dark-muted: #4A1515;      /* Muted dark red for body text */
+
+  /* Shadows */
+  --shadow-soft: 0 4px 20px rgba(211, 47, 47, 0.08);
+  --shadow-premium: 0 10px 30px rgba(211, 47, 47, 0.15);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #FFFDF5;
+  --foreground: #1A0A0A;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+@layer base {
+  * {
+    @apply border-red-primary/10;
+  }
+}
+
+.premium-card {
+  @apply bg-white rounded-2xl shadow-soft border border-red-primary/8 transition-all duration-300 hover:shadow-premium;
+}
+
+.btn-primary {
+  @apply bg-red-primary text-white px-6 py-3 rounded-full font-bold transition-all duration-300 hover:bg-red-deep hover:scale-105 active:scale-95 shadow-md;
+}
+
+.btn-secondary {
+  @apply bg-gold text-dark px-6 py-3 rounded-full font-bold transition-all duration-300 hover:bg-gold-deep hover:scale-105 active:scale-95 shadow-md;
 }
