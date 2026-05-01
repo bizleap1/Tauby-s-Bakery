@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { CATEGORIES } from "@/constants";
 import ProductCard from "@/components/product/ProductCard";
@@ -19,7 +19,7 @@ const MOCK_PRODUCTS = [
   { id: "8", name: "Blueberry Cheesecake", price: 1600, category: "Cheesecakes", image: "https://images.unsplash.com/photo-1524351199679-46cddfddb234?q=80&w=600", isEggless: false },
 ];
 
-export default function MenuPage() {
+function MenuContent() {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category");
   
@@ -121,5 +121,13 @@ export default function MenuPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function MenuPage() {
+  return (
+    <Suspense fallback={<div className="pt-32 pb-24 min-h-screen flex items-center justify-center"><div className="animate-pulse text-chocolate/40">Loading menu...</div></div>}>
+      <MenuContent />
+    </Suspense>
   );
 }
