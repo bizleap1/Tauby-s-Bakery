@@ -21,7 +21,7 @@ const SLIDES = [
     title: "Artisan Gelato",
     subtitle: "Chilled Delights",
     description: "Experience the creamy, authentic taste of Italy with our handcrafted gelato made from fresh local ingredients.",
-    image: "https://images.unsplash.com/photo-1557142046-c704a3adf364?q=80&w=2000",
+    image: "/artisan-gelato-hero.png",
     link: "/menu?category=gelato",
     accent: "bg-red-primary"
   },
@@ -30,7 +30,7 @@ const SLIDES = [
     title: "Black Forest",
     subtitle: "The Timeless Classic",
     description: "Layers of moist chocolate sponge, fresh whipped cream, and tart cherries. A celebration in every bite.",
-    image: "https://images.unsplash.com/photo-1616031037011-087000171abe?q=80&w=2000",
+    image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=2000",
     link: "/menu?category=regular%20cakes",
     accent: "bg-red-deep"
   },
