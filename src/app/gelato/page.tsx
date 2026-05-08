@@ -10,37 +10,37 @@ const GELATO_FLAVORS = [
   {
     name: "Classic Belgian Chocolate",
     description: "Rich, dark chocolate made with premium Belgian cocoa.",
-    image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=600",
     tag: "Bestseller"
   },
   {
     name: "Sicilian Pistachio",
     description: "Authentic roasted pistachios for a nutty, creamy finish.",
-    image: "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?q=80&w=600",
     tag: "Premium"
   },
   {
     name: "Wild Berry Sorbet",
     description: "Refreshing blend of seasonal berries, 100% dairy-free.",
-    image: "https://images.unsplash.com/photo-1534706936160-d5ee67737249?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1534706936160-d5ee67737249?q=80&w=600",
     tag: "Vegan"
   },
   {
     name: "Alphonso Mango",
     description: "Pure mango pulp from the finest Ratnagiri mangoes.",
-    image: "https://images.unsplash.com/photo-1560508180-03f285f67ded?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc3605d?q=80&w=600",
     tag: "Seasonal"
   },
   {
     name: "Vanilla Bean",
     description: "Classic Madagascar vanilla with visible bean specks.",
-    image: "https://images.unsplash.com/photo-1560008581-09826d1de69e?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1549395156-9747d273d45a?q=80&w=600",
     tag: "Classic"
   },
   {
     name: "Roasted Hazelnut",
     description: "Indulgent hazelnut paste blended with smooth cream.",
-    image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=600",
     tag: "New"
   }
 ];
@@ -59,7 +59,7 @@ export default function GelatoPage() {
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center justify-center">
         <Image
-          src="https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?q=80&w=2000&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1502741126161-b048400d085d?q=80&w=2000"
           alt="Artisan Gelato"
           fill
           className="object-cover"
