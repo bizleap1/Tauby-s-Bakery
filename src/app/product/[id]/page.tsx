@@ -23,12 +23,12 @@ interface Product {
 
 // Generate full product list from constants
 const ALL_PRODUCTS_LIST = [
-  ...REGULAR_CAKES.map(c => ({
+  ...REGULAR_CAKES.map((c, index) => ({
     ...c,
     description: "Indulge in our artisanal " + c.name + ". Handcrafted with the finest ingredients and a perfect balance of flavors.",
     images: [c.image, "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=600"],
     rating: 4.8,
-    reviews: Math.floor(Math.random() * 100) + 50
+    reviews: 120 + (index % 10)
   })),
   {
     id: "ds-1",
@@ -61,6 +61,11 @@ export default function ProductDetailPage() {
   const { id } = useParams();
   const product = MOCK_PRODUCTS[id as string] || ALL_PRODUCTS_LIST[0];
   const { addItem, setIsOpen } = useCart();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [selectedWeight, setSelectedWeight] = useState<string>(WEIGHT_OPTIONS[0]);
   const [selectedEggType, setSelectedEggType] = useState<string>(EGG_TYPES[1]); // Eggless default
@@ -92,6 +97,8 @@ export default function ProductDetailPage() {
     setIsOpen(true);
     toast.success("Added to bag!");
   };
+
+  if (!mounted) return <div className="min-h-screen bg-cream animate-pulse" />;
 
   return (
     <div className="pt-32 pb-24 bg-white min-h-screen">
