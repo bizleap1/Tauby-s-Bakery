@@ -9,6 +9,7 @@ import Link from "next/link";
 import { toast } from "react-hot-toast";
 import Script from "next/script";
 import { createRazorpayOrder, verifyRazorpayPayment } from "@/actions/payment";
+import { DELIVERY_CHARGE } from "@/constants";
 import { motion } from "framer-motion";
 
 interface RazorpayResponse {
@@ -43,7 +44,7 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const subtotal = getTotalPrice();
-  const deliveryCharge = subtotal > 1000 ? 0 : 50;
+  const deliveryCharge = DELIVERY_CHARGE;
   const total = subtotal + deliveryCharge;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -253,8 +254,8 @@ export default function CheckoutPage() {
                       <span>₹{subtotal.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between text-sm text-chocolate/60">
-                      <span>Delivery Charge</span>
-                      <span>{deliveryCharge === 0 ? "Free" : `₹${deliveryCharge}`}</span>
+                      <span>Delivery Charge <span className="text-[10px]">(Nagpur, 7 km)</span></span>
+                      <span>₹{deliveryCharge}</span>
                     </div>
                     <div className="flex justify-between text-lg font-bold text-chocolate pt-2 border-t border-chocolate/5">
                       <span>Total</span>

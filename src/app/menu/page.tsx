@@ -1,38 +1,125 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { CATEGORIES } from "@/constants";
+import { REGULAR_CAKES, MAIN_CATEGORIES, SUB_CATEGORIES } from "@/constants";
 import ProductCard from "@/components/product/ProductCard";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Mock Data
+const CAKE_IMAGES: Record<string, string> = {
+  "Plain Chocolate":    "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600",
+  "Butter Scotch":      "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=600",
+  "Mocha Cake":         "https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=600",
+  "Pineapple Cake":     "https://images.unsplash.com/photo-1550617931-e17a7b70dce2?q=80&w=600",
+  "Belgian Chocolate":  "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80",
+  "Black Forest":       "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?auto=format&fit=crop&w=800&q=80",
+  "Chocochips":         "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=600",
+  "Chocolate Truffle":  "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
+  "Coffee Walnut":      "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?q=80&w=600",
+  "Dark Chocolate":     "https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?q=80&w=600",
+  "Rich Devils":        "https://images.unsplash.com/photo-1602351447937-745cb720612f?q=80&w=600",
+  "Honey Almond":       "https://images.unsplash.com/photo-1519915028121-7d3463d20b13?q=80&w=600",
+  "Chocolate Walnut":   "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=600",
+  "Red Velvet":         "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?auto=format&fit=crop&w=800&q=80",
+  "Mix Fruit":          "https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=600",
+  "Alphonso Mango":     "https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=800&q=80",
+};
+
 const MOCK_PRODUCTS = [
-  { id: "1", name: "Belgian Chocolate Truffle", price: 1200, category: "Cakes", image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600", isEggless: true },
-  { id: "2", name: "Classic New York Cheesecake", price: 1500, category: "Cheesecakes", image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?q=80&w=600", isEggless: false },
-  { id: "3", name: "Red Velvet Bliss", price: 950, category: "Cakes", image: "https://images.unsplash.com/photo-1586788680434-30d324671ff6?q=80&w=600", isEggless: true },
-  { id: "4", name: "Assorted French Macarons", price: 600, category: "Pastries", image: "https://images.unsplash.com/photo-1558326567-98ae2405596b?q=80&w=600", isEggless: true },
-  { id: "5", name: "Double Chocolate Cupcake", price: 150, category: "Cupcakes", image: "https://images.unsplash.com/photo-1587668178277-295251f900ce?q=80&w=600", isEggless: false },
-  { id: "6", name: "Dark Chocolate Bark", price: 450, category: "Chocolates", image: "https://images.unsplash.com/photo-1548907040-4baa42d10919?q=80&w=600", isEggless: true },
-  { id: "7", name: "Veggie Pizza Slice", price: 120, category: "Snacks", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600", isEggless: true },
-  { id: "8", name: "Blueberry Cheesecake", price: 1600, category: "Cheesecakes", image: "https://images.unsplash.com/photo-1524351199679-46cddfddb234?q=80&w=600", isEggless: false },
+  ...REGULAR_CAKES.map((cake) => ({
+    ...cake,
+    mainCategory: "Our Products",
+    image: CAKE_IMAGES[cake.name] ?? "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600",
+    isEggless: true,
+  })),
+  {
+    id: "ds-1",
+    name: "Blueberry Cheesecake",
+    price: 1300,
+    category: "Desserts",
+    mainCategory: "Our Products",
+    image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?q=80&w=600",
+    isEggless: true,
+  },
+  {
+    id: "gl-1",
+    name: "Artisan Pistachio Gelato",
+    price: 250,
+    category: "Gelato",
+    mainCategory: "Our Products",
+    image: "/artisan-gelato-hero.png",
+    isEggless: true,
+  },
+  {
+    id: "oc-1",
+    name: "Tiered Wedding Cake",
+    price: 5000,
+    category: "Wedding Cake",
+    mainCategory: "Occasional Cakes",
+    image: "https://images.unsplash.com/photo-1535254973040-607b474cb80d?q=80&w=600",
+    isEggless: true,
+  }
+];
+
+const ALL_SUB_CATEGORIES = [
+  ...SUB_CATEGORIES["Our Products"],
+  ...SUB_CATEGORIES["Occasional Cakes"],
 ];
 
 function MenuContent() {
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category");
-  
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory ? initialCategory.charAt(0).toUpperCase() + initialCategory.slice(1) : "All");
+  const rawCategory = searchParams.get("category");
+  const rawMain = searchParams.get("main");
+  const [mounted, setMounted] = useState(false);
+
+  const deriveInitialMain = () => {
+    if (rawMain === "our-products") return "Our Products";
+    if (rawMain === "occasional-cakes") return "Occasional Cakes";
+    return "All";
+  };
+
+  const [activeMain, setActiveMain] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [isEgglessOnly, setIsEgglessOnly] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+    setActiveMain(deriveInitialMain());
+  }, [rawMain]);
+
+  const visibleSubCategories =
+    activeMain === "All"
+      ? ALL_SUB_CATEGORIES
+      : SUB_CATEGORIES[activeMain as keyof typeof SUB_CATEGORIES] ?? [];
+
+  if (!mounted) {
+    return (
+      <div className="pt-32 pb-24 bg-cream/30 min-h-screen">
+        <div className="container mx-auto px-6">
+          <div className="mb-12 animate-pulse">
+            <div className="h-12 w-48 bg-chocolate/10 rounded mb-4" />
+            <div className="h-4 w-64 bg-chocolate/10 rounded" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const filteredProducts = MOCK_PRODUCTS.filter((product) => {
-    const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
+    const matchesMain = activeMain === "All" || product.mainCategory === activeMain;
+    const matchesCategory =
+      selectedCategory === "All" || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesEggless = !isEgglessOnly || product.isEggless;
-    return matchesCategory && matchesSearch && matchesEggless;
+    return matchesMain && matchesCategory && matchesSearch && matchesEggless;
   });
+
+  const handleMainChange = (main: string) => {
+    setActiveMain(main);
+    setSelectedCategory("All");
+  };
 
   return (
     <div className="pt-32 pb-24 bg-cream/30 min-h-screen">
@@ -42,40 +129,31 @@ function MenuContent() {
           <h1 className="text-4xl md:text-6xl font-heading font-bold text-chocolate mb-4">
             Our <span className="text-pink-deep">Menu</span>
           </h1>
-          <p className="text-chocolate-light">Browse our collection of handcrafted sweet treats and savory snacks.</p>
+          <p className="text-chocolate-light">Browse our collection of handcrafted sweet treats.</p>
+        </div>
+
+        {/* Main Category Tabs */}
+        <div className="flex gap-3 mb-6">
+          {["All", ...MAIN_CATEGORIES].map((main) => (
+            <button
+              key={main}
+              onClick={() => handleMainChange(main)}
+              className={cn(
+                "px-6 py-2 rounded-full font-bold transition-all text-sm uppercase tracking-wide",
+                activeMain === main
+                  ? "bg-red-primary text-white shadow-lg"
+                  : "bg-white text-chocolate border border-chocolate/10 hover:bg-pink-pastel/30"
+              )}
+            >
+              {main}
+            </button>
+          ))}
         </div>
 
         {/* Filters & Search */}
         <div className="flex flex-col lg:flex-row gap-8 mb-12">
-          {/* Categories */}
-          <div className="flex-1">
-            <div className="flex items-center gap-4 overflow-x-auto pb-4 scrollbar-hide">
-              <button
-                onClick={() => setSelectedCategory("All")}
-                className={cn(
-                  "px-6 py-2 rounded-full font-medium whitespace-nowrap transition-all",
-                  selectedCategory === "All" ? "bg-chocolate text-cream" : "bg-white text-chocolate hover:bg-pink-pastel/30"
-                )}
-              >
-                All
-              </button>
-              {CATEGORIES.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={cn(
-                    "px-6 py-2 rounded-full font-medium whitespace-nowrap transition-all",
-                    selectedCategory === category ? "bg-chocolate text-cream" : "bg-white text-chocolate hover:bg-pink-pastel/30"
-                  )}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Search & Toggle */}
-          <div className="flex flex-col sm:flex-row gap-4">
+          {/* Search & Eggless Toggle */}
+          <div className="flex flex-col sm:flex-row gap-4 ml-auto">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-chocolate/40" size={18} />
               <input
@@ -86,12 +164,14 @@ function MenuContent() {
                 className="pl-12 pr-6 py-2 rounded-full bg-white border border-chocolate/5 focus:outline-none focus:border-pink-deep w-full sm:w-64"
               />
             </div>
-            
+
             <button
               onClick={() => setIsEgglessOnly(!isEgglessOnly)}
               className={cn(
                 "flex items-center justify-center gap-2 px-6 py-2 rounded-full font-medium border transition-all",
-                isEgglessOnly ? "bg-green-500 text-white border-green-600" : "bg-white text-chocolate border-chocolate/5 hover:bg-pink-pastel/30"
+                isEgglessOnly
+                  ? "bg-green-500 text-white border-green-600"
+                  : "bg-white text-chocolate border-chocolate/5 hover:bg-pink-pastel/30"
               )}
             >
               <span className={cn("w-2 h-2 rounded-full", isEgglessOnly ? "bg-white" : "bg-green-500")} />
@@ -99,6 +179,13 @@ function MenuContent() {
             </button>
           </div>
         </div>
+
+        {/* Price note for Regular Cakes */}
+        {(selectedCategory === "Regular Cakes" || selectedCategory === "All") && (
+          <p className="text-xs text-chocolate/50 mb-6 italic">
+            * Regular Cake prices are for 500gm (half kg). Delivery: ₹100 flat within 7 km of Nagpur.
+          </p>
+        )}
 
         {/* Results */}
         {filteredProducts.length > 0 ? (
@@ -112,7 +199,12 @@ function MenuContent() {
             <h3 className="text-2xl font-heading text-chocolate/40 font-bold mb-2">No treats found</h3>
             <p className="text-chocolate-light">Try adjusting your filters or search query.</p>
             <button
-              onClick={() => { setSelectedCategory("All"); setSearchQuery(""); setIsEgglessOnly(false); }}
+              onClick={() => {
+                setActiveMain("All");
+                setSelectedCategory("All");
+                setSearchQuery("");
+                setIsEgglessOnly(false);
+              }}
               className="mt-6 text-pink-deep font-bold hover:underline"
             >
               Reset all filters
@@ -126,7 +218,13 @@ function MenuContent() {
 
 export default function MenuPage() {
   return (
-    <Suspense fallback={<div className="pt-32 pb-24 min-h-screen flex items-center justify-center"><div className="animate-pulse text-chocolate/40">Loading menu...</div></div>}>
+    <Suspense
+      fallback={
+        <div className="pt-32 pb-24 min-h-screen flex items-center justify-center">
+          <div className="animate-pulse text-chocolate/40">Loading menu...</div>
+        </div>
+      }
+    >
       <MenuContent />
     </Suspense>
   );

@@ -12,11 +12,14 @@ create table public.profiles (
 );
 
 -- CATEGORIES
+-- main_category: "Our Products" | "Occasional Cakes" (null = top-level)
 create table public.categories (
   id uuid default uuid_generate_v4() primary key,
   name text not null unique,
   slug text not null unique,
+  main_category text check (main_category in ('Our Products', 'Occasional Cakes')),
   image_url text,
+  sort_order int default 0,
   created_at timestamp with time zone default timezone('utc'::text, now())
 );
 
@@ -97,3 +100,53 @@ create policy "Users can manage their own addresses." on public.addresses for al
 
 -- Realtime
 alter publication supabase_realtime add table public.orders;
+
+-- ============================================================
+-- SEED DATA
+-- ============================================================
+
+-- Categories: Our Products
+insert into public.categories (name, slug, main_category, sort_order) values
+  ('Regular Cakes',  'regular-cakes',  'Our Products', 1),
+  ('Tea Time Cakes', 'tea-time-cakes', 'Our Products', 2),
+  ('Desserts',       'desserts',       'Our Products', 3),
+  ('Gelato',         'gelato',         'Our Products', 4),
+  ('Gift Hampers',   'gift-hampers',   'Our Products', 5),
+  ('Cookies',        'cookies',        'Our Products', 6);
+
+-- Categories: Occasional Cakes
+insert into public.categories (name, slug, main_category, sort_order) values
+  ('Birthday Spl',      'birthday-spl',      'Occasional Cakes', 1),
+  ('Anniversary Spl',   'anniversary-spl',   'Occasional Cakes', 2),
+  ('Wedding Cake',      'wedding-cake',      'Occasional Cakes', 3),
+  ('Kids Cake',         'kids-cake',         'Occasional Cakes', 4),
+  ('Customised Cakes',  'customised-cakes',  'Occasional Cakes', 5);
+
+-- Regular Cakes products (all prices per 500gm / half kg)
+insert into public.products (name, price, category_id, egg_type, weight_options, is_active)
+select
+  p.name,
+  p.price,
+  c.id,
+  'Both',
+  '["500gm","1kg","1.5kg","2kg"]'::jsonb,
+  true
+from (values
+  ('Plain Chocolate',   500.00),
+  ('Butter Scotch',     525.00),
+  ('Mocha Cake',        525.00),
+  ('Pineapple Cake',    525.00),
+  ('Belgian Chocolate', 575.00),
+  ('Black Forest',      575.00),
+  ('Chocochips',        575.00),
+  ('Chocolate Truffle', 575.00),
+  ('Coffee Walnut',     575.00),
+  ('Dark Chocolate',    575.00),
+  ('Rich Devils',       575.00),
+  ('Honey Almond',      575.00),
+  ('Chocolate Walnut',  600.00),
+  ('Red Velvet',        600.00),
+  ('Mix Fruit',         600.00),
+  ('Alphonso Mango',    800.00)
+) as p(name, price)
+join public.categories c on c.slug = 'regular-cakes';

@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Hero from "@/components/common/Hero";
 import CategoryGrid from "@/components/product/CategoryGrid";
 import Bestsellers from "@/components/product/Bestsellers";
+import Testimonials from "@/components/common/Testimonials";
 import { Star, ShieldCheck, Truck } from "lucide-react";
 
 export default function Home() {
@@ -40,26 +40,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials (Simple for now) */}
-      <section className="py-24 bg-chocolate text-cream">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-12">What Our Customers <span className="text-pink-pastel">Say</span></h2>
-          <div className="max-w-4xl mx-auto">
-            <p className="text-2xl italic font-heading leading-relaxed mb-8">
-              &quot;The Belgian Chocolate Truffle cake was absolute heaven! It made our anniversary so special. The delivery was right on time and the cake was beautifully packed.&quot;
-            </p>
-            <div className="flex items-center justify-center gap-4">
-              <div className="relative w-12 h-12 rounded-full bg-pink-pastel/20 overflow-hidden">
-                <Image src="https://i.pravatar.cc/150?u=priya" alt="Priya Sharma" fill className="object-cover" />
-              </div>
-              <div className="text-left">
-                <span className="block font-bold">Priya Sharma</span>
-                <span className="text-sm text-cream/60 text-pink-pastel">Loyal Customer</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Testimonials />
 
       {/* Call to Action */}
       <section className="py-20 bg-pink-pastel">

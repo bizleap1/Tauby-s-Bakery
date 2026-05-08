@@ -37,9 +37,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="min-h-screen flex bg-zinc-50 pt-20"> {/* pt-20 to clear the main Navbar */}
+    <div className="min-h-screen flex bg-zinc-50 pt-28"> {/* pt-28 to clear the 2-bar Navbar */}
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-chocolate/5 flex flex-col h-[calc(100vh-80px)] sticky top-20">
+      <aside className="w-64 bg-white border-r border-chocolate/5 flex flex-col h-[calc(100vh-112px)] sticky top-28">
         <div className="p-6">
           <h2 className="text-xl font-heading font-bold text-chocolate mb-1">Admin Panel</h2>
           <p className="text-xs text-chocolate/40 font-medium">Manage your bakery</p>

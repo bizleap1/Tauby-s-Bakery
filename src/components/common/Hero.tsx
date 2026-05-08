@@ -1,104 +1,243 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const SLIDES = [
+  {
+    id: 1,
+    title: "Tea Time Cakes",
+    subtitle: "Afternoon Perfection",
+    description: "Light, airy, and perfectly balanced. Our tea time cakes are the ideal companion for your evening brew.",
+    image: "/tea-time-cakes-hero.png",
+    link: "/menu?category=tea%20time%20cakes",
+    accent: "bg-gold"
+  },
+  {
+    id: 2,
+    title: "Artisan Gelato",
+    subtitle: "Chilled Delights",
+    description: "Experience the creamy, authentic taste of Italy with our handcrafted gelato made from fresh local ingredients.",
+    image: "/artisan-gelato-hero.png",
+    link: "/menu?category=gelato",
+    accent: "bg-red-primary"
+  },
+  {
+    id: 3,
+    title: "Black Forest",
+    subtitle: "The Timeless Classic",
+    description: "Layers of moist chocolate sponge, fresh whipped cream, and tart cherries. A celebration in every bite.",
+    image: "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=2000&auto=format&fit=crop",
+    link: "/menu?category=regular%20cakes",
+    accent: "bg-red-deep"
+  },
+  {
+    id: 4,
+    title: "Red Velvet",
+    subtitle: "Velvety Elegance",
+    description: "Strikingly beautiful and incredibly delicious. Our red velvet cakes are as smooth as they are stunning.",
+    image: "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?q=80&w=2000&auto=format&fit=crop",
+    link: "/menu?category=regular%20cakes",
+    accent: "bg-red-primary"
+  }
+];
 
 export default function Hero() {
-  return (
-    <section className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden bg-white">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=2000&auto=format&fit=crop"
-          alt="Premium Chocolate Cake"
-          fill
-          priority
-          className="object-cover opacity-15"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/60" />
-      </div>
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
-      {/* Gold diagonal accent */}
-      <div className="absolute right-0 top-0 w-1/2 h-full z-0 overflow-hidden hidden lg:block">
-        <div
-          className="absolute right-[-10%] top-[-10%] w-[80%] h-[130%] opacity-20"
-          style={{ background: "linear-gradient(135deg, #F5C518 0%, #E0A800 100%)", transform: "skewX(-10deg)" }}
-        />
-      </div>
+  const nextSlide = useCallback(() => {
+    setDirection(1);
+    setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
+  }, []);
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            <span className="inline-flex items-center gap-2 bg-gold/15 text-red-deep font-bold tracking-widest uppercase text-xs px-4 py-2 rounded-full mb-6 border border-gold/40">
-              🎂 ESTD. 1995 — Sinful Delights
+  const prevSlide = useCallback(() => {
+    setDirection(-1);
+    setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
+    const timer = setInterval(nextSlide, 6000);
+    return () => clearInterval(timer);
+  }, [nextSlide]);
+
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0
+    })
+  };
+
+  if (!mounted) {
+    return (
+      <section className="relative h-[90vh] min-h-[700px] w-full overflow-hidden bg-cream">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={SLIDES[0].image}
+            alt={SLIDES[0].title}
+            fill
+            priority
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-dark/80 via-dark/40 to-transparent lg:from-dark/70 lg:via-dark/20" />
+        </div>
+        <div className="container mx-auto px-6 h-full flex items-center relative z-10">
+          <div className="max-w-2xl text-white">
+            <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-widest mb-6 ${SLIDES[0].accent}`}>
+              {SLIDES[0].subtitle}
             </span>
-            <h1 className="text-5xl md:text-7xl font-heading font-bold text-dark leading-tight mb-6">
-              Sweetening Your{" "}
-              <span className="text-red-primary">Celebrations</span>{" "}
-              <span className="text-gold">Every Day</span>
+            <h1 className="text-6xl md:text-8xl font-heading font-bold mb-6 drop-shadow-lg">
+              {SLIDES[0].title}
             </h1>
-            <p className="text-lg text-dark-muted leading-relaxed mb-10 max-w-lg">
-              From artisanal cakes to delicate pastries, experience the magic of premium baking delivered right to your doorstep.
+            <p className="text-lg md:text-xl text-white/90 mb-10 max-w-lg leading-relaxed drop-shadow-md">
+              {SLIDES[0].description}
             </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
-            <div className="flex flex-wrap gap-4">
-              <Link href="/menu" className="btn-primary flex items-center justify-center gap-2">
-                Order Online 🎂
-              </Link>
-              <Link href="/custom-cakes" className="btn-secondary flex items-center justify-center">
-                Custom Cake Request
-              </Link>
+  return (
+    <section className="relative h-[90vh] min-h-[700px] w-full overflow-hidden bg-cream">
+      <AnimatePresence initial={false} custom={direction}>
+        <motion.div
+          key={currentSlide}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.5 }
+          }}
+          className="absolute inset-0 w-full h-full"
+        >
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={SLIDES[currentSlide].image}
+              alt={SLIDES[currentSlide].title}
+              fill
+              priority
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-dark/80 via-dark/40 to-transparent lg:from-dark/70 lg:via-dark/20" />
+          </div>
+
+          {/* Content */}
+          <div className="container mx-auto px-6 h-full flex items-center relative z-10">
+            <div className="max-w-2xl text-white">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-widest mb-6 ${SLIDES[currentSlide].accent}`}
+              >
+                {SLIDES[currentSlide].subtitle}
+              </motion.span>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-6xl md:text-8xl font-heading font-bold mb-6 drop-shadow-lg"
+              >
+                {SLIDES[currentSlide].title}
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="text-lg md:text-xl text-white/90 mb-10 max-w-lg leading-relaxed drop-shadow-md"
+              >
+                {SLIDES[currentSlide].description}
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="flex flex-wrap gap-4"
+              >
+                <Link href={SLIDES[currentSlide].link} className="btn-primary flex items-center gap-2">
+                  Order Now 🍰
+                </Link>
+                <Link href="/menu" className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-3 rounded-full font-bold transition-all border border-white/30">
+                  View Full Menu
+                </Link>
+              </motion.div>
             </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
 
-            {/* Trust Badges */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: 1 }}
-              className="mt-14 flex items-center gap-10 pt-8 border-t border-red-primary/10"
-            >
-              <div className="text-center">
-                <span className="block text-3xl font-heading font-bold text-red-primary">50k+</span>
-                <span className="text-xs text-dark-muted uppercase tracking-widest font-bold">Happy Customers</span>
-              </div>
-              <div className="text-center">
-                <span className="block text-3xl font-heading font-bold text-red-primary">100%</span>
-                <span className="text-xs text-dark-muted uppercase tracking-widest font-bold">Freshly Baked</span>
-              </div>
-              <div className="text-center">
-                <span className="block text-3xl font-heading font-bold text-gold">4.9/5</span>
-                <span className="text-xs text-dark-muted uppercase tracking-widest font-bold">Top Rated</span>
-              </div>
-            </motion.div>
-          </motion.div>
+      {/* Navigation Controls */}
+      <div className="absolute bottom-10 left-0 right-0 z-20 flex justify-center items-center gap-8">
+        <button
+          onClick={prevSlide}
+          className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/20 transition-all backdrop-blur-sm"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft size={24} />
+        </button>
 
-          {/* Logo large on right */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="hidden lg:flex justify-center items-center"
-          >
-            <div className="relative">
-              <div className="absolute inset-0 rounded-full bg-gold/20 blur-3xl scale-110" />
-              <Image
-                src="/logo.png"
-                alt="Tauby's Bakery"
-                width={480}
-                height={480}
-                className="object-contain relative z-10 drop-shadow-2xl"
-              />
-            </div>
-          </motion.div>
+        {/* Indicators */}
+        <div className="flex gap-3">
+          {SLIDES.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                setDirection(index > currentSlide ? 1 : -1);
+                setCurrentSlide(index);
+              }}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === currentSlide ? "w-8 bg-gold" : "w-2 bg-white/50"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={nextSlide}
+          className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/20 transition-all backdrop-blur-sm"
+          aria-label="Next slide"
+        >
+          <ChevronRight size={24} />
+        </button>
+      </div>
+
+      {/* Trust Badges Floating (Mobile Hidden) */}
+      <div className="absolute top-1/2 right-10 -translate-y-1/2 z-20 hidden xl:flex flex-col gap-6">
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl text-white text-center w-32">
+          <span className="block text-2xl font-bold font-heading">50k+</span>
+          <span className="text-[10px] uppercase tracking-widest opacity-80">Fans</span>
+        </div>
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl text-white text-center w-32">
+          <span className="block text-2xl font-bold font-heading">100%</span>
+          <span className="text-[10px] uppercase tracking-widest opacity-80">Fresh</span>
+        </div>
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl text-white text-center w-32">
+          <span className="block text-2xl font-bold font-heading">4.9/5</span>
+          <span className="text-[10px] uppercase tracking-widest opacity-80">Rated</span>
         </div>
       </div>
     </section>
   );
 }
+

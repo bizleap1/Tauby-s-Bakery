@@ -46,20 +46,27 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Contact Info */}
+        {/* Store Locations */}
         <div>
-          <h4 className="font-bold text-sm mb-6 uppercase tracking-widest text-gold">Contact Us</h4>
-          <ul className="space-y-4">
-            <li className="flex items-start gap-3">
-              <MapPin size={18} className="text-gold shrink-0 mt-0.5" />
-              <span className="text-white/70 text-sm">123 Bakery Lane, Sweet District, Nagpur, Maharashtra 440001</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <Phone size={18} className="text-gold shrink-0" />
-              <span className="text-white/70 text-sm">+91 98765 43210</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <Mail size={18} className="text-gold shrink-0" />
+          <h4 className="font-bold text-sm mb-6 uppercase tracking-widest text-gold">Our Stores</h4>
+          <ul className="space-y-5">
+            {[
+              { branch: "Civil Lines", addr: "Behind Poonam Plaza, Palm Road, Civil Lines, Nagpur 440001", phone: "7420026601 / 7420026602" },
+              { branch: "Sadar", addr: "SJTI Complex, Residency Road, Sadar, Nagpur 440002", phone: "7420026603" },
+              { branch: "Ramdaspeth", addr: "277 Central Bazar Road, next to Meditrina Hospital, Nagpur 440010", phone: "7420026606 / 7420026607" },
+              { branch: "Kingsway", addr: "Military Canteen, Kingsway Road, Sitabuldi, Nagpur 440001", phone: "7420026607" },
+            ].map((s) => (
+              <li key={s.branch} className="flex items-start gap-3">
+                <MapPin size={16} className="text-gold shrink-0 mt-1" />
+                <div>
+                  <p className="text-gold text-xs font-bold uppercase tracking-wider mb-0.5">{s.branch}</p>
+                  <p className="text-white/60 text-xs leading-snug">{s.addr}</p>
+                  <p className="text-white/50 text-xs mt-0.5 flex items-center gap-1"><Phone size={10} className="text-gold" />{s.phone}</p>
+                </div>
+              </li>
+            ))}
+            <li className="flex items-center gap-3 pt-1">
+              <Mail size={16} className="text-gold shrink-0" />
               <span className="text-white/70 text-sm">orders@taubys.com</span>
             </li>
           </ul>
@@ -84,7 +91,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="container mx-auto px-6 mt-16 pt-8 border-t border-gold/20 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/40">
-        <p>&copy; {new Date().getFullYear()} Tauby&apos;s Bakery — Sinful Delights. All rights reserved.</p>
+        <p suppressHydrationWarning>&copy; {new Date().getFullYear()} Tauby&apos;s Bakery — Sinful Delights. All rights reserved.</p>
         <div className="flex gap-6">
           <Link href="/privacy" className="hover:text-gold transition-colors">Privacy Policy</Link>
           <Link href="/terms" className="hover:text-gold transition-colors">Terms of Service</Link>
