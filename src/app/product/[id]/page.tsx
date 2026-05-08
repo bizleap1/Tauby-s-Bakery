@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { ShoppingCart, Heart, Calendar, Clock, Info } from "lucide-react";
 import { motion } from "framer-motion";
-import { WEIGHT_OPTIONS, DELIVERY_SLOTS, EGG_TYPES } from "@/constants";
+import { WEIGHT_OPTIONS, DELIVERY_SLOTS, EGG_TYPES, REGULAR_CAKES } from "@/constants";
 import { useCart } from "@/store/useCart";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
@@ -21,25 +21,46 @@ interface Product {
   reviews: number;
 }
 
-// Mock Data (In real app, fetch this from Supabase)
-const MOCK_PRODUCTS: Record<string, Product> = {
-  "1": {
-    id: "1",
-    name: "Belgian Chocolate Truffle",
-    description: "Indulge in the richness of pure Belgian chocolate. This truffle cake is a chocolate lover's dream, featuring layers of moist chocolate sponge filled with velvety dark chocolate ganache and finished with a smooth glaze.",
-    price: 1200,
-    category: "Cakes",
-    images: ["https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1000", "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=600"],
+// Generate full product list from constants
+const ALL_PRODUCTS_LIST = [
+  ...REGULAR_CAKES.map(c => ({
+    ...c,
+    description: "Indulge in our artisanal " + c.name + ". Handcrafted with the finest ingredients and a perfect balance of flavors.",
+    images: [c.image, "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=600"],
+    rating: 4.8,
+    reviews: Math.floor(Math.random() * 100) + 50
+  })),
+  {
+    id: "ds-1",
+    name: "Blueberry Cheesecake",
+    description: "Creamy, rich cheesecake topped with a generous layer of fresh blueberry compote.",
+    price: 1300,
+    category: "Desserts",
+    images: ["https://images.unsplash.com/photo-1533134242443-d4fd215305ad?q=80&w=1000"],
     rating: 4.9,
-    reviews: 128,
+    reviews: 89
   },
-  // Add more as needed
-};
+  {
+    id: "gl-1",
+    name: "Artisan Pistachio Gelato",
+    description: "Authentic Italian-style gelato made with roasted Sicilian pistachios.",
+    price: 250,
+    category: "Gelato",
+    images: ["/artisan-gelato-hero.png"],
+    rating: 5.0,
+    reviews: 45
+  }
+];
+
+const MOCK_PRODUCTS: Record<string, Product> = ALL_PRODUCTS_LIST.reduce((acc, p) => ({
+  ...acc,
+  [p.id]: p
+}), {});
 
 export default function ProductDetailPage() {
   const { id } = useParams();
-  const product = MOCK_PRODUCTS[id as string] || MOCK_PRODUCTS["1"]; // Fallback for demo
-  const addItem = useCart((state) => state.addItem);
+  const product = MOCK_PRODUCTS[id as string] || ALL_PRODUCTS_LIST[0];
+  const { addItem, setIsOpen } = useCart();
 
   const [selectedWeight, setSelectedWeight] = useState<string>(WEIGHT_OPTIONS[0]);
   const [selectedEggType, setSelectedEggType] = useState<string>(EGG_TYPES[1]); // Eggless default
@@ -68,7 +89,8 @@ export default function ProductDetailPage() {
       deliverySlot,
     });
 
-    toast.success("Added to cart!");
+    setIsOpen(true);
+    toast.success("Added to bag!");
   };
 
   return (

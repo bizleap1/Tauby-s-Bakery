@@ -61,14 +61,13 @@ function DropdownMenu({ items }: { items: { name: string; href: string }[] }) {
 export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { isOpen, setIsOpen, getItemCount } = useCart();
   const [mounted, setMounted] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpenDropdown, setMobileOpenDropdown] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
 
-  const getItemCount = useCart((state) => state.getItemCount);
   const cartCount = mounted ? getItemCount() : 0;
 
   useEffect(() => { setMounted(true); }, []);
@@ -107,7 +106,7 @@ export default function Navbar() {
               </span>
             </div>
             <Link
-              href="/menu?category=customised+cakes"
+              href="/custom-cakes"
               className="flex items-center gap-1 text-gold font-semibold hover:text-white transition-colors"
             >
               ✦ Personalised Cakes
@@ -187,7 +186,7 @@ export default function Navbar() {
                 <User size={20} />
               </Link>
               <button
-                onClick={() => setIsCartOpen(true)}
+                onClick={() => setIsOpen(true)}
                 className="relative text-dark hover:text-red-primary transition-colors"
                 aria-label="Cart"
               >
@@ -293,7 +292,7 @@ export default function Navbar() {
         </header>
       </div>
 
-      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      <CartDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
 }

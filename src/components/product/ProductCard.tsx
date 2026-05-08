@@ -54,15 +54,11 @@ export default function ProductCard({
           </div>
 
           {/* Quick Action */}
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              // Add to cart logic here
-            }}
+          <div
             className="absolute bottom-4 right-4 bg-white text-chocolate w-10 h-10 rounded-full flex items-center justify-center shadow-lg transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hover:bg-pink-deep hover:text-white"
           >
             <Plus size={20} />
-          </button>
+          </div>
         </div>
 
         {/* Content */}

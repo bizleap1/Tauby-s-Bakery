@@ -7,30 +7,10 @@ import ProductCard from "@/components/product/ProductCard";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const CAKE_IMAGES: Record<string, string> = {
-  "Plain Chocolate":    "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600",
-  "Butter Scotch":      "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=600",
-  "Mocha Cake":         "https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=600",
-  "Pineapple Cake":     "https://images.unsplash.com/photo-1550617931-e17a7b70dce2?q=80&w=600",
-  "Belgian Chocolate":  "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80",
-  "Black Forest":       "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?auto=format&fit=crop&w=800&q=80",
-  "Chocochips":         "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=600",
-  "Chocolate Truffle":  "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80",
-  "Coffee Walnut":      "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?q=80&w=600",
-  "Dark Chocolate":     "https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?q=80&w=600",
-  "Rich Devils":        "https://images.unsplash.com/photo-1602351447937-745cb720612f?q=80&w=600",
-  "Honey Almond":       "https://images.unsplash.com/photo-1519915028121-7d3463d20b13?q=80&w=600",
-  "Chocolate Walnut":   "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=600",
-  "Red Velvet":         "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?auto=format&fit=crop&w=800&q=80",
-  "Mix Fruit":          "https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=600",
-  "Alphonso Mango":     "https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=800&q=80",
-};
-
 const MOCK_PRODUCTS = [
   ...REGULAR_CAKES.map((cake) => ({
     ...cake,
     mainCategory: "Our Products",
-    image: CAKE_IMAGES[cake.name] ?? "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600",
     isEggless: true,
   })),
   {

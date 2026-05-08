@@ -19,7 +19,7 @@ export default function Footer() {
             className="object-contain h-16 w-auto brightness-0 invert"
           />
           <p className="text-white/70 leading-relaxed text-sm">
-            Crafting sinful delights since 1995. We take pride in using the finest ingredients to create cakes that look as good as they taste.
+            Crafting sinful delights for 20+ years. We take pride in using the finest ingredients to create cakes that look as good as they taste.
           </p>
           <div className="flex items-center gap-4">
             <Link href="#" className="w-10 h-10 rounded-full border border-gold/40 flex items-center justify-center hover:bg-gold hover:text-dark hover:border-gold transition-all font-bold text-sm text-gold">

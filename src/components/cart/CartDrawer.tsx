@@ -14,6 +14,13 @@ interface CartDrawerProps {
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const { items, removeItem, updateQuantity, getTotalPrice, getItemCount } = useCart();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <AnimatePresence>
@@ -51,7 +58,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             <div className="flex-grow overflow-y-auto p-6 space-y-6">
               {items.length > 0 ? (
                 items.map((item) => (
-                  <div key={`${item.id}-${item.weight}-${item.eggType}`} className="flex gap-4 group">
+                  <div key={`${item.id}-${item.weight}-${item.eggType}-${item.deliveryDate}-${item.deliverySlot}-${item.customMessage}`} className="flex gap-4 group">
                     <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-white shrink-0 shadow-soft">
                       <Image src={item.image} alt={item.name} fill className="object-cover" />
                     </div>
@@ -59,7 +66,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       <div className="flex justify-between items-start mb-1">
                         <h3 className="font-bold text-chocolate leading-tight">{item.name}</h3>
                         <button 
-                          onClick={() => removeItem(item.id, item.weight)}
+                          onClick={() => removeItem(item.id, item.weight, item.eggType, item.deliveryDate, item.deliverySlot, item.customMessage)}
                           className="text-chocolate/20 hover:text-red-500 transition-colors"
                         >
                           <Trash2 size={18} />
@@ -67,17 +74,18 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       </div>
                       <p className="text-xs text-chocolate/60 mb-2">
                         {item.weight} • {item.eggType}
+                        {item.deliveryDate && <span className="block mt-1">Delivery: {item.deliveryDate} ({item.deliverySlot})</span>}
                       </p>
                       
                       <div className="flex justify-between items-center mt-4">
                         <div className="flex items-center border border-chocolate/10 rounded-full">
                           <button 
-                            onClick={() => updateQuantity(item.id, item.quantity - 1, item.weight)}
+                            onClick={() => updateQuantity(item.id, item.quantity - 1, item.weight, item.eggType, item.deliveryDate, item.deliverySlot, item.customMessage)}
                             className="px-3 py-1 hover:bg-white"
                           >-</button>
                           <span className="px-2 font-bold text-sm min-w-[20px] text-center">{item.quantity}</span>
                           <button 
-                            onClick={() => updateQuantity(item.id, item.quantity + 1, item.weight)}
+                            onClick={() => updateQuantity(item.id, item.quantity + 1, item.weight, item.eggType, item.deliveryDate, item.deliverySlot, item.customMessage)}
                             className="px-3 py-1 hover:bg-white"
                           >+</button>
                         </div>
