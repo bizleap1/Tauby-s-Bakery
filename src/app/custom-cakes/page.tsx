@@ -140,7 +140,7 @@ export default function CustomCakesPage() {
                   src={img}
                   alt={`Cake ${i}`}
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-dark/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <Heart className="text-white fill-white" size={32} />

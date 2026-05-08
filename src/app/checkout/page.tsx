@@ -90,7 +90,8 @@ export default function CheckoutPage() {
 
           if (verifyResult.success) {
             toast.success("Payment successful! Order placed.", { id: loadingToast });
-            setOrderId(`#TB-${(Math.random() * 1000000).toFixed(0)}`);
+            const stableId = `TB-${Date.now().toString().slice(-6)}`;
+            setOrderId(stableId);
             setStep(3);
             clearCart();
           } else {
