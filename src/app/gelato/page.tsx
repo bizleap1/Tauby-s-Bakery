@@ -164,7 +164,7 @@ export default function GelatoPage() {
                     src={flavor.image}
                     alt={flavor.name}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute top-4 right-4">
                     <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-bold text-dark shadow-sm">

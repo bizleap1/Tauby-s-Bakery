@@ -37,7 +37,7 @@ export default function ProductCard({
             src={image}
             alt={name}
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
           
           {/* Badges */}

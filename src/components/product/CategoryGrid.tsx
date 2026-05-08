@@ -48,7 +48,7 @@ export default function CategoryGrid() {
                     src={CATEGORY_IMAGES[category]}
                     alt={category}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-chocolate/0 group-hover:bg-chocolate/20 transition-colors duration-500" />
                 </div>
