@@ -103,7 +103,7 @@ const MOCK_PRODUCTS = [
     price: 1800,
     category: "Gift Hampers",
     mainCategory: "Our Products",
-    image: "https://images.unsplash.com/photo-1544433331-0dee8a0b168a?q=80&w=600",
+    image: "https://images.unsplash.com/photo-1594631252845-29fc4586c562?auto=format&fit=crop&w=800&q=80",
     isEggless: true,
   },
   {
@@ -112,7 +112,7 @@ const MOCK_PRODUCTS = [
     price: 1200,
     category: "Gift Hampers",
     mainCategory: "Our Products",
-    image: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=600",
+    image: "https://images.unsplash.com/photo-1549462980-6a620023190a?auto=format&fit=crop&w=800&q=80",
     isEggless: true,
   },
   // Cookies
@@ -150,7 +150,7 @@ const MOCK_PRODUCTS = [
     price: 15000,
     category: "Wedding Cake",
     mainCategory: "Occasional Cakes",
-    image: "https://images.unsplash.com/photo-1535254973040-607b474cb80d?q=80&w=600",
+    image: "https://images.unsplash.com/photo-1522673607200-164883eecd0c?auto=format&fit=crop&w=800&q=80",
     isEggless: true,
   },
   {
@@ -168,7 +168,7 @@ const MOCK_PRODUCTS = [
     price: 3500,
     category: "Anniversary Spl",
     mainCategory: "Occasional Cakes",
-    image: "https://images.unsplash.com/photo-1562233237-106555e0030c?q=80&w=600",
+    image: "https://images.unsplash.com/photo-1535254973040-607b474cb80d?auto=format&fit=crop&w=800&q=80",
     isEggless: true,
   },
   {
