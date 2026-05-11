@@ -50,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full" suppressHydrationWarning>
       <body className={`${playfair.variable} ${poppins.variable} font-body bg-cream text-dark min-h-full flex flex-col antialiased`}>
         <Toaster position="top-center" />
         <Navbar />

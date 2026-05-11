@@ -61,6 +61,7 @@ export default function ProductDetailPage() {
   const { id } = useParams();
   const product = MOCK_PRODUCTS[id as string] || ALL_PRODUCTS_LIST[0];
   const { addItem, setIsOpen } = useCart();
+  const [mounted, setMounted] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
   const [minDate, setMinDate] = useState("");
   const [selectedWeight, setSelectedWeight] = useState<string>(WEIGHT_OPTIONS[0]);
