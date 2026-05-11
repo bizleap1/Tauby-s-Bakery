@@ -48,7 +48,7 @@ export default function Bestsellers() {
   }, []);
 
   if (!mounted) return (
-    <section className="py-24 bg-cream/50 min-h-[400px]">
+    <section className="py-24 bg-cream/50">
       <div className="container mx-auto px-6" />
     </section>
   );

@@ -25,6 +25,16 @@ export default function ProductCard({
   rating = 4.5,
   isEggless = false,
 }: ProductCardProps) {
+  const [mounted, setMounted] = React.useState(false);
+  
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <div className="bg-white rounded-2xl aspect-[4/5] animate-pulse" />;
+  }
+
   return (
     <motion.div
       whileHover={{ y: -8 }}
