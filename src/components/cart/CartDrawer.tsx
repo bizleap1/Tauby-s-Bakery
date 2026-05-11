@@ -143,7 +143,6 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 </p>
               </div>
             )}
-        )}
           </motion.div>
         </>
       )}
