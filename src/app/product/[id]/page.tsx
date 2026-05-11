@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { WEIGHT_OPTIONS, DELIVERY_SLOTS, EGG_TYPES, REGULAR_CAKES } from "@/constants";
 import { useCart } from "@/store/useCart";
 import { toast } from "react-hot-toast";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 
 interface Product {
   id: string;
@@ -137,9 +137,9 @@ export default function ProductDetailPage() {
           {/* Product Info & Options */}
           <div className="space-y-8">
             <div>
-              <span className="text-pink-deep font-bold tracking-widest uppercase text-sm">{product.category}</span>
-              <h1 className="text-4xl font-heading font-bold text-chocolate mt-2 mb-4">{product.name}</h1>
-              <div className="flex items-center gap-4 text-chocolate/60">
+              <span className="text-red-primary font-bold tracking-widest uppercase text-sm">{product.category}</span>
+              <h1 className="text-4xl font-heading font-bold text-dark mt-2 mb-4">{product.name}</h1>
+              <div className="flex items-center gap-4 text-dark/60">
                 <div className="flex text-gold">
                   {[...Array(5)].map((_, i) => (
                     <span key={i}>★</span>
@@ -147,15 +147,15 @@ export default function ProductDetailPage() {
                 </div>
                 <span className="text-sm">({product.reviews} customer reviews)</span>
               </div>
-              <p className="text-3xl font-bold text-pink-deep mt-6">₹{product.price.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-red-primary mt-6">₹{formatPrice(product.price)}</p>
             </div>
 
-            <p className="text-chocolate-light leading-relaxed">{product.description}</p>
+            <p className="text-dark-muted leading-relaxed">{product.description}</p>
 
-            <div className="space-y-6 border-t border-chocolate/5 pt-8">
+            <div className="space-y-6 border-t border-dark/5 pt-8">
               {/* Weight Options */}
               <div>
-                <label className="block text-sm font-bold text-chocolate uppercase tracking-widest mb-4">Select Weight</label>
+                <label className="block text-sm font-bold text-dark uppercase tracking-widest mb-4">Select Weight</label>
                 <div className="flex flex-wrap gap-3">
                   {WEIGHT_OPTIONS.map((weight) => (
                     <button
@@ -163,7 +163,7 @@ export default function ProductDetailPage() {
                       onClick={() => setSelectedWeight(weight)}
                       className={cn(
                         "px-6 py-2 rounded-full border-2 transition-all font-medium",
-                        selectedWeight === weight ? "border-pink-deep bg-pink-deep/5 text-pink-deep" : "border-chocolate/10 text-chocolate/60 hover:border-chocolate/20"
+                        selectedWeight === weight ? "border-red-primary bg-red-primary/5 text-red-primary" : "border-dark/10 text-dark/60 hover:border-dark/20"
                       )}
                     >
                       {weight}
@@ -174,7 +174,7 @@ export default function ProductDetailPage() {
 
               {/* Egg/Eggless Options */}
               <div>
-                <label className="block text-sm font-bold text-chocolate uppercase tracking-widest mb-4">Dietary Preference</label>
+                <label className="block text-sm font-bold text-dark uppercase tracking-widest mb-4">Dietary Preference</label>
                 <div className="flex gap-4">
                   {EGG_TYPES.map((type) => (
                     <button
@@ -182,7 +182,7 @@ export default function ProductDetailPage() {
                       onClick={() => setSelectedEggType(type)}
                       className={cn(
                         "flex-1 py-3 rounded-2xl border-2 flex items-center justify-center gap-3 transition-all",
-                        selectedEggType === type ? "border-chocolate bg-chocolate text-cream" : "border-chocolate/10 text-chocolate/60 hover:border-chocolate/20"
+                        selectedEggType === type ? "border-dark bg-dark text-cream" : "border-dark/10 text-dark/60 hover:border-dark/20"
                       )}
                     >
                       <span className={cn("w-3 h-3 rounded-full", type === "Eggless" ? "bg-green-500" : "bg-red-500")} />
@@ -194,21 +194,21 @@ export default function ProductDetailPage() {
 
               {/* Custom Message */}
               <div>
-                <label className="block text-sm font-bold text-chocolate uppercase tracking-widest mb-4">Custom Message on Cake (Optional)</label>
+                <label className="block text-sm font-bold text-dark uppercase tracking-widest mb-4">Custom Message on Cake (Optional)</label>
                 <input
                   type="text"
                   maxLength={30}
                   placeholder="E.g., Happy Birthday Mom"
                   value={customMessage}
                   onChange={(e) => setCustomMessage(e.target.value)}
-                  className="w-full px-6 py-3 rounded-2xl bg-cream/30 border border-chocolate/10 focus:outline-none focus:border-pink-deep"
+                  className="w-full px-6 py-3 rounded-2xl bg-cream/30 border border-dark/10 focus:outline-none focus:border-red-primary"
                 />
               </div>
 
               {/* Delivery Schedule */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-chocolate uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-dark uppercase tracking-widest mb-4 flex items-center gap-2">
                     <Calendar size={16} /> Delivery Date
                   </label>
                   <input
@@ -216,17 +216,17 @@ export default function ProductDetailPage() {
                     min={new Date().toISOString().split("T")[0]}
                     value={deliveryDate}
                     onChange={(e) => setDeliveryDate(e.target.value)}
-                    className="w-full px-6 py-3 rounded-2xl bg-cream/30 border border-chocolate/10 focus:outline-none focus:border-pink-deep"
+                    className="w-full px-6 py-3 rounded-2xl bg-cream/30 border border-dark/10 focus:outline-none focus:border-red-primary"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-chocolate uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-dark uppercase tracking-widest mb-4 flex items-center gap-2">
                     <Clock size={16} /> Delivery Slot
                   </label>
                   <select
                     value={deliverySlot}
                     onChange={(e) => setDeliverySlot(e.target.value)}
-                    className="w-full px-6 py-3 rounded-2xl bg-cream/30 border border-chocolate/10 focus:outline-none focus:border-pink-deep appearance-none"
+                    className="w-full px-6 py-3 rounded-2xl bg-cream/30 border border-dark/10 focus:outline-none focus:border-red-primary appearance-none"
                   >
                     <option value="">Select a slot</option>
                     {DELIVERY_SLOTS.map((slot) => (
@@ -238,7 +238,7 @@ export default function ProductDetailPage() {
 
               {/* Add to Cart Actions */}
               <div className="flex gap-4 pt-8">
-                <div className="flex items-center border-2 border-chocolate/10 rounded-full overflow-hidden">
+                <div className="flex items-center border-2 border-dark/10 rounded-full overflow-hidden">
                   <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-6 py-3 hover:bg-cream/50">-</button>
                   <span className="px-4 font-bold text-lg min-w-[40px] text-center">{quantity}</span>
                   <button onClick={() => setQuantity(quantity + 1)} className="px-6 py-3 hover:bg-cream/50">+</button>
@@ -250,14 +250,14 @@ export default function ProductDetailPage() {
                   <ShoppingCart size={20} />
                   Add to Cart
                 </button>
-                <button className="p-4 rounded-full border-2 border-chocolate/10 text-chocolate/40 hover:text-pink-deep hover:border-pink-deep transition-all">
+                <button className="p-4 rounded-full border-2 border-dark/10 text-dark/40 hover:text-red-primary hover:border-red-primary transition-all">
                   <Heart size={24} />
                 </button>
               </div>
 
-              <div className="bg-pink-pastel/10 rounded-2xl p-4 flex items-start gap-4">
-                <Info size={20} className="text-pink-deep shrink-0 mt-1" />
-                <p className="text-sm text-chocolate-light leading-snug">
+              <div className="bg-red-light/10 rounded-2xl p-4 flex items-start gap-4">
+                <span className="text-red-primary shrink-0 mt-1"><Info size={20} /></span>
+                <p className="text-sm text-dark-muted leading-snug">
                   Please note: Final price may vary based on weight and custom decorations. Same day delivery available for orders before 2 PM.
                 </p>
               </div>

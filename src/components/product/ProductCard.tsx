@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Plus, Star } from "lucide-react";
 import { motion } from "framer-motion";
+import { formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
   id: string;
@@ -80,7 +81,7 @@ export default function ProductCard({
             {name}
           </h3>
           <p className="text-red-primary font-bold text-xl">
-            ₹{price.toLocaleString()}
+            ₹{formatPrice(price)}
           </p>
         </div>
       </Link>
