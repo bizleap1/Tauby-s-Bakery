@@ -103,7 +103,7 @@ const MOCK_PRODUCTS = [
     price: 1800,
     category: "Gift Hampers",
     mainCategory: "Our Products",
-    image: "https://images.unsplash.com/photo-1576402187878-974f70c890a5?q=80&w=800",
+    image: "https://images.unsplash.com/photo-1544787210-2211d24715ec?q=80&w=800",
     isEggless: true,
   },
   {
@@ -112,7 +112,7 @@ const MOCK_PRODUCTS = [
     price: 1200,
     category: "Gift Hampers",
     mainCategory: "Our Products",
-    image: "https://images.unsplash.com/photo-1549462980-6a620023190a?q=80&w=800",
+    image: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800",
     isEggless: true,
   },
   // Cookies
