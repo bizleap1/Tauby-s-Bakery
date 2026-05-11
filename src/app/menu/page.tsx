@@ -233,6 +233,7 @@ const MOCK_PRODUCTS = [
     mainCategory: "Our Products",
     image: "/artisan-gelato-hero.png",
     isEggless: true,
+    description: "Authentic Italian style pistachio gelato with crushed nuts.",
   },
   {
     id: "gl-2",
@@ -242,6 +243,27 @@ const MOCK_PRODUCTS = [
     mainCategory: "Our Products",
     image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=600",
     isEggless: true,
+    description: "Deep, rich Belgian chocolate in a creamy frozen delight.",
+  },
+  {
+    id: "gl-3",
+    name: "Alphonso Mango Gelato",
+    price: 250,
+    category: "Gelato",
+    mainCategory: "Our Products",
+    image: "https://images.unsplash.com/photo-1591154706847-e8359d04c0ca?q=80&w=800",
+    isEggless: true,
+    description: "Pure mango pulp from the finest Ratnagiri mangoes.",
+  },
+  {
+    id: "gl-4",
+    name: "Vanilla Bean Gelato",
+    price: 250,
+    category: "Gelato",
+    mainCategory: "Our Products",
+    image: "https://images.unsplash.com/photo-1570197788417-0e82375c9391?q=80&w=800",
+    isEggless: true,
+    description: "Classic Madagascar vanilla with visible bean specks.",
   }
 ];
 

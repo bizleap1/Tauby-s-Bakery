@@ -61,5 +61,5 @@ export const REGULAR_CAKES = [
   { id: "rc-13", name: "Chocolate Walnut",    price: 600, category: "Regular Cakes", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=600" },
   { id: "rc-14", name: "Red Velvet",          price: 600, category: "Regular Cakes", image: "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?auto=format&fit=crop&w=800&q=80" },
   { id: "rc-15", name: "Mix Fruit",           price: 600, category: "Regular Cakes", image: "https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=600" },
-  { id: "rc-16", name: "Alphonso Mango",      price: 800, category: "Regular Cakes", image: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=800&q=80" },
+  { id: "rc-16", name: "Alphonso Mango",      price: 800, category: "Regular Cakes", image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop" },
 ] as const;
