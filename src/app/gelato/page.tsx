@@ -28,19 +28,19 @@ const GELATO_FLAVORS = [
   {
     name: "Alphonso Mango",
     description: "Pure mango pulp from the finest Ratnagiri mangoes.",
-    image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc3605d?q=80&w=600",
+    image: "https://images.unsplash.com/photo-1591154706847-e8359d04c0ca?q=80&w=800",
     tag: "Seasonal"
   },
   {
     name: "Vanilla Bean",
     description: "Classic Madagascar vanilla with visible bean specks.",
-    image: "https://images.unsplash.com/photo-1549395156-9747d273d45a?q=80&w=600",
+    image: "https://images.unsplash.com/photo-1570197788417-0e82375c9391?q=80&w=800",
     tag: "Classic"
   },
   {
     name: "Roasted Hazelnut",
     description: "Indulgent hazelnut paste blended with smooth cream.",
-    image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=600",
+    image: "https://images.unsplash.com/photo-1505394033343-431d1b7fa47e?q=80&w=800",
     tag: "New"
   }
 ];
