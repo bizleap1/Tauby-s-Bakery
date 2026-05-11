@@ -71,7 +71,7 @@ export default function GelatoPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white text-[10px] uppercase tracking-widest font-bold mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white text-[9px] md:text-[10px] uppercase tracking-widest font-bold mb-6 md:mb-8"
           >
             <Sparkles size={14} className="text-gold" /> Artisan Italian Gelato
           </motion.div>
@@ -79,7 +79,7 @@ export default function GelatoPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-6xl md:text-8xl font-heading font-bold text-white mb-8 leading-tight"
+            className="text-5xl sm:text-6xl md:text-8xl font-heading font-bold text-white mb-6 md:mb-8 leading-tight"
           >
             Sinfull <span className="text-gold">Chill</span>
           </motion.h1>
@@ -87,7 +87,7 @@ export default function GelatoPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-white/90 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed mb-12"
+            className="text-white/90 max-w-2xl mx-auto text-base md:text-xl leading-relaxed mb-10 md:mb-12"
           >
             Experience the true essence of Italian craftsmanship. Our gelato is churned fresh daily with low overrun for a dense, silky, and intense flavor experience.
           </motion.p>
@@ -97,7 +97,7 @@ export default function GelatoPage() {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/60 flex flex-col items-center gap-2"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/60 flex flex-col items-center gap-2 hidden md:flex"
         >
           <span className="text-[10px] uppercase tracking-[0.3em] font-bold">Explore Flavors</span>
           <div className="w-px h-12 bg-gradient-to-b from-white/60 to-transparent" />
@@ -105,9 +105,9 @@ export default function GelatoPage() {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-32 bg-white">
+      <section className="py-20 md:py-32 bg-white">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
             <div className="relative aspect-square rounded-[3rem] overflow-hidden">
               <Image
                 src="https://images.unsplash.com/photo-1534706936160-d5ee67737249?q=80&w=800&auto=format&fit=crop"
