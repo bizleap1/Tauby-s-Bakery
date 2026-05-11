@@ -59,7 +59,7 @@ export default function GelatoPage() {
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center justify-center">
         <Image
-          src="https://images.unsplash.com/photo-1502741126161-b048400d085d?q=80&w=2000"
+          src="/gelato-hero-new.png"
           alt="Artisan Gelato"
           fill
           className="object-cover"
