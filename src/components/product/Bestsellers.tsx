@@ -58,14 +58,14 @@ export default function Bestsellers() {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-chocolate mb-4">
-              Our <span className="text-pink-deep">Bestsellers</span>
+            <h2 className="text-4xl md:text-5xl font-heading font-bold text-dark mb-4">
+              Our <span className="text-red-primary">Bestsellers</span>
             </h2>
-            <p className="text-chocolate-light max-w-xl">
+            <p className="text-dark-muted max-w-xl">
               The cakes our customers love the most. Handcrafted fresh every single day.
             </p>
           </div>
-          <Link href="/menu" className="group flex items-center gap-2 text-chocolate font-bold border-b-2 border-pink-pastel pb-1 hover:border-pink-deep transition-all">
+          <Link href="/menu" className="group flex items-center gap-2 text-dark font-bold border-b-2 border-red-primary/20 pb-1 hover:border-red-primary transition-all">
             View All Products
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </Link>
