@@ -61,19 +61,19 @@ export default function ProductDetailPage() {
   const { id } = useParams();
   const product = MOCK_PRODUCTS[id as string] || ALL_PRODUCTS_LIST[0];
   const { addItem, setIsOpen } = useCart();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  const [activeImage, setActiveImage] = useState(0);
+  const [minDate, setMinDate] = useState("");
   const [selectedWeight, setSelectedWeight] = useState<string>(WEIGHT_OPTIONS[0]);
   const [selectedEggType, setSelectedEggType] = useState<string>(EGG_TYPES[1]); // Eggless default
   const [customMessage, setCustomMessage] = useState("");
   const [deliveryDate, setDeliveryDate] = useState("");
   const [deliverySlot, setDeliverySlot] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [activeImage, setActiveImage] = useState(0);
+
+  useEffect(() => {
+    setMounted(true);
+    setMinDate(new Date().toISOString().split("T")[0]);
+  }, []);
 
   const handleAddToCart = () => {
     if (!deliveryDate || !deliverySlot) {
@@ -213,7 +213,7 @@ export default function ProductDetailPage() {
                   </label>
                   <input
                     type="date"
-                    min={new Date().toISOString().split("T")[0]}
+                    min={minDate}
                     value={deliveryDate}
                     onChange={(e) => setDeliveryDate(e.target.value)}
                     className="w-full px-6 py-3 rounded-2xl bg-cream/30 border border-dark/10 focus:outline-none focus:border-red-primary"
