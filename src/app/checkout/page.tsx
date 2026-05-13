@@ -12,6 +12,8 @@ import { createRazorpayOrder, verifyRazorpayPayment } from "@/actions/payment";
 import { DELIVERY_CHARGE } from "@/constants";
 import { motion } from "framer-motion";
 import { formatPrice } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 interface RazorpayResponse {
   razorpay_order_id: string;
@@ -44,10 +46,44 @@ export default function CheckoutPage() {
     city: "Nagpur",
   });
   const [isProcessing, setIsProcessing] = useState(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     setMounted(true);
-  }, []);
+    
+    // Check auth status
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please login to continue to checkout");
+        router.push("/login?redirect=/checkout");
+        return;
+      }
+      
+      // Pre-fill form data if available from profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', session.user.id)
+        .single();
+        
+      if (profile) {
+        setFormData(prev => ({
+          ...prev,
+          name: profile.full_name || "",
+          email: profile.email || session.user.email || "",
+          phone: profile.phone || "",
+        }));
+      } else {
+        setFormData(prev => ({
+          ...prev,
+          email: session.user.email || "",
+        }));
+      }
+    };
+    
+    checkAuth();
+  }, [router]);
 
   const subtotal = getTotalPrice();
   const deliveryCharge = DELIVERY_CHARGE;
@@ -87,21 +123,28 @@ export default function CheckoutPage() {
         handler: async function (response: RazorpayResponse) {
           toast.loading("Verifying payment...", { id: loadingToast });
           
-          // 3. Verify payment on server
+          // 3. Verify payment on server and SAVE ORDER
           const verifyResult = await verifyRazorpayPayment(
             response.razorpay_order_id,
             response.razorpay_payment_id,
-            response.razorpay_signature
+            response.razorpay_signature,
+            {
+              items: items,
+              total: total,
+              address: formData.address,
+              pincode: formData.pincode,
+              deliveryDate: items[0]?.deliveryDate || new Date().toISOString(),
+              deliverySlot: items[0]?.deliverySlot || "Standard",
+            }
           );
 
           if (verifyResult.success) {
             toast.success("Payment successful! Order placed.", { id: loadingToast });
-            const stableId = `TB-${Date.now().toString().slice(-6)}`;
-            setOrderId(stableId);
+            setOrderId(verifyResult.orderId || `TB-${Date.now().toString().slice(-6)}`);
             setStep(3);
             clearCart();
           } else {
-            toast.error("Payment verification failed. Please contact support.", { id: loadingToast });
+            toast.error(verifyResult.error || "Payment verification failed. Please contact support.", { id: loadingToast });
           }
         },
         prefill: {

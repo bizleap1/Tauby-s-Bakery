@@ -4,12 +4,15 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ShoppingCart, User, Search, Menu, X, ChevronDown, MapPin, Phone } from "lucide-react";
+import { ShoppingCart, User, Search, Menu, X, ChevronDown, MapPin, Phone, LogOut, Package } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/store/useCart";
 import CartDrawer from "../cart/CartDrawer";
 import { SUB_CATEGORIES } from "@/constants";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 interface NavItem {
   name: string;
@@ -66,11 +69,35 @@ export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpenDropdown, setMobileOpenDropdown] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const cartCount = mounted ? getItemCount() : 0;
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => { 
+    setMounted(true);
+    const getUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user || null);
+    };
+    getUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setIsProfileOpen(false);
+    toast.success("Logged out successfully");
+    router.push("/");
+  };
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 40);
@@ -83,6 +110,9 @@ export default function Navbar() {
     const handleClickOutside = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
         setOpenDropdown(null);
+      }
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setIsProfileOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -182,9 +212,56 @@ export default function Navbar() {
               <button className="text-dark hover:text-red-primary transition-colors hidden md:block" aria-label="Search">
                 <Search size={20} />
               </button>
-              <Link href="/login" className="text-dark hover:text-red-primary transition-colors" aria-label="Account">
-                <User size={20} />
-              </Link>
+              
+              <div className="relative" ref={profileRef}>
+                {user ? (
+                  <button 
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="flex items-center gap-2 text-dark hover:text-red-primary transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-red-primary/10 flex items-center justify-center text-red-primary border border-red-primary/20">
+                      <User size={18} />
+                    </div>
+                  </button>
+                ) : (
+                  <Link href="/login" className="text-dark hover:text-red-primary transition-colors" aria-label="Account">
+                    <User size={20} />
+                  </Link>
+                )}
+
+                <AnimatePresence>
+                  {isProfileOpen && user && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="absolute right-0 mt-2 w-56 bg-white border border-gray-100 shadow-xl rounded-2xl overflow-hidden z-[60]"
+                    >
+                      <div className="px-5 py-4 border-b border-gray-50 bg-gray-50/50">
+                        <p className="text-xs font-bold text-dark/40 uppercase tracking-wider mb-0.5">Account</p>
+                        <p className="text-sm font-bold text-dark truncate">{user.email}</p>
+                      </div>
+                      <div className="py-2">
+                        <Link 
+                          href="/profile/orders" 
+                          onClick={() => setIsProfileOpen(false)}
+                          className="flex items-center gap-3 px-5 py-2.5 text-sm text-dark hover:bg-red-primary/5 hover:text-red-primary transition-colors"
+                        >
+                          <Package size={16} />
+                          My Orders
+                        </Link>
+                        <button 
+                          onClick={handleLogout}
+                          className="flex items-center gap-3 w-full text-left px-5 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                        >
+                          <LogOut size={16} />
+                          Logout
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
               <button
                 onClick={() => setIsOpen(true)}
                 className="relative text-dark hover:text-red-primary transition-colors"

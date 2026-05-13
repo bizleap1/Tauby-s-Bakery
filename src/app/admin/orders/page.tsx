@@ -1,94 +1,191 @@
 "use client";
 
-import React, { useState } from "react";
-import { Search, Eye } from "lucide-react";
-
-const MOCK_ORDERS = [
-  { id: "#TB-10293", customer: "Rahul Verma", date: "Today, 10:45 AM", amount: "₹2,450", status: "Preparing", items: 3 },
-  { id: "#TB-10292", customer: "Priya Sharma", date: "Today, 09:15 AM", amount: "₹1,200", status: "Out for Delivery", items: 1 },
-  { id: "#TB-10291", customer: "Amit Patel", date: "Yesterday, 04:30 PM", amount: "₹3,800", status: "Delivered", items: 5 },
-  { id: "#TB-10290", customer: "Neha Gupta", date: "Yesterday, 11:20 AM", amount: "₹950", status: "Delivered", items: 2 },
-  { id: "#TB-10289", customer: "Vikram Singh", date: "Oct 24, 2023", amount: "₹1,800", status: "Cancelled", items: 1 },
-];
+import React, { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { Package, Truck, CheckCircle2, Clock, Filter, Search, ChevronRight, Eye } from "lucide-react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { formatPrice } from "@/lib/utils";
+import { format } from "date-fns";
+import { toast } from "react-hot-toast";
 
 export default function AdminOrdersPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [orders, setOrders] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filter, setFilter] = useState("All");
+
+  const statusOptions = ["Pending", "Paid", "Confirmed", "Preparing", "Out for Delivery", "Delivered", "Cancelled"];
+
+  const fetchOrders = async () => {
+    setIsLoading(true);
+    let query = supabase
+      .from('orders')
+      .select('*, order_items(*), profiles(*)')
+      .order('created_at', { ascending: false });
+
+    if (filter !== "All") {
+      query = query.eq('status', filter);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      toast.error("Failed to fetch orders");
+    } else {
+      setOrders(data || []);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [filter]);
+
+  const updateStatus = async (orderId: string, newStatus: string) => {
+    const { error } = await supabase
+      .from('orders')
+      .update({ status: newStatus })
+      .eq('id', orderId);
+
+    if (error) {
+      toast.error("Failed to update status");
+    } else {
+      toast.success(`Order status updated to ${newStatus}`);
+      fetchOrders();
+    }
+  };
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-heading font-bold text-chocolate mb-2">Orders</h1>
-        <p className="text-chocolate-light">Track and manage customer orders.</p>
-      </div>
-
-      <div className="premium-card bg-white overflow-hidden">
-        {/* Toolbar */}
-        <div className="p-6 border-b border-chocolate/5 flex flex-col sm:flex-row justify-between gap-4">
-          <div className="relative w-full sm:w-96">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-chocolate/40" size={18} />
-            <input
-              type="text"
-              placeholder="Search by Order ID or Customer..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-6 py-2.5 rounded-xl bg-cream/30 border border-chocolate/5 focus:border-pink-deep focus:outline-none"
-            />
+    <div className="pt-32 pb-24 bg-cream/30 min-h-screen">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+          <div>
+            <h1 className="text-4xl font-heading font-bold text-dark mb-2">Order Management</h1>
+            <p className="text-dark/60 font-medium italic">Administrative panel for Tauby&apos;s Bakery</p>
           </div>
-          <div className="flex gap-4">
-            <select className="px-4 py-2.5 rounded-xl bg-cream/30 border border-chocolate/5 focus:border-pink-deep focus:outline-none text-chocolate font-medium">
-              <option value="All">All Statuses</option>
-              <option value="Preparing">Preparing</option>
-              <option value="Out for Delivery">Out for Delivery</option>
-              <option value="Delivered">Delivered</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
+          
+          <div className="flex flex-wrap gap-2">
+            {["All", ...statusOptions].map((opt) => (
+              <button
+                key={opt}
+                onClick={() => setFilter(opt)}
+                className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
+                  filter === opt 
+                    ? "bg-dark text-cream shadow-lg" 
+                    : "bg-white text-dark/40 hover:bg-dark/5 border border-dark/5"
+                }`}
+              >
+                {opt}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Orders Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-cream/30 border-b border-chocolate/5">
-              <tr>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-chocolate/40">Order ID</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-chocolate/40">Customer</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-chocolate/40">Date</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-chocolate/40">Items</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-chocolate/40">Amount</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-chocolate/40">Status</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-chocolate/40 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-chocolate/5">
-              {MOCK_ORDERS.map((order) => (
-                <tr key={order.id} className="hover:bg-cream/10 transition-colors">
-                  <td className="px-6 py-4 font-bold text-chocolate">{order.id}</td>
-                  <td className="px-6 py-4 text-chocolate-light font-medium">{order.customer}</td>
-                  <td className="px-6 py-4 text-chocolate/60 text-sm">{order.date}</td>
-                  <td className="px-6 py-4 text-chocolate/60">{order.items} items</td>
-                  <td className="px-6 py-4 font-bold text-chocolate">{order.amount}</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                      order.status === "Delivered" ? "bg-green-100 text-green-700" :
-                      order.status === "Preparing" ? "bg-blue-100 text-blue-700" :
-                      order.status === "Cancelled" ? "bg-red-100 text-red-700" :
-                      "bg-yellow-100 text-yellow-700"
-                    }`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <button className="p-2 text-chocolate/40 hover:text-pink-deep hover:bg-pink-pastel/20 rounded-lg transition-colors inline-flex items-center gap-2 text-sm font-bold">
-                      <Eye size={18} />
-                      View
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-24">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-primary"></div>
+          </div>
+        ) : orders.length === 0 ? (
+          <div className="premium-card p-24 bg-white text-center">
+            <Package size={48} className="mx-auto text-dark/10 mb-4" />
+            <h3 className="text-xl font-heading font-bold text-dark">No orders found</h3>
+            <p className="text-dark/40 mt-2">Try changing the status filter</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6">
+            {orders.map((order) => (
+              <motion.div
+                key={order.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="premium-card bg-white overflow-hidden border border-dark/5 group hover:shadow-xl transition-all"
+              >
+                <div className="p-6 md:p-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-center">
+                    {/* Order Basic Info */}
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-bold text-dark/40 uppercase tracking-widest">Order ID</p>
+                      <p className="font-bold text-dark">#{order.id.slice(0, 8).toUpperCase()}</p>
+                      <p className="text-xs text-dark/60">{format(new Date(order.created_at), 'MMM d, h:mm a')}</p>
+                    </div>
+
+                    {/* Customer Info */}
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-bold text-dark/40 uppercase tracking-widest">Customer</p>
+                      <p className="font-bold text-dark">{order.profiles?.full_name || "Guest Customer"}</p>
+                      <p className="text-xs text-dark/60 truncate">{order.profiles?.email || "No email"}</p>
+                    </div>
+
+                    {/* Amount & Items */}
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-bold text-dark/40 uppercase tracking-widest">Details</p>
+                      <p className="font-bold text-red-primary">₹{formatPrice(order.total_amount)}</p>
+                      <p className="text-xs text-dark/60">{order.order_items.length} item(s)</p>
+                    </div>
+
+                    {/* Status Update */}
+                    <div className="flex flex-col gap-3">
+                      <p className="text-[10px] font-bold text-dark/40 uppercase tracking-widest">Update Status</p>
+                      <select
+                        value={order.status}
+                        onChange={(e) => updateStatus(order.id, e.target.value)}
+                        className={`w-full px-3 py-2 rounded-xl text-xs font-bold border focus:outline-none transition-colors ${
+                          order.status === 'Delivered' ? 'bg-green-50 border-green-200 text-green-700' :
+                          order.status === 'Cancelled' ? 'bg-red-50 border-red-200 text-red-700' :
+                          'bg-blue-50 border-blue-200 text-blue-700'
+                        }`}
+                      >
+                        {statusOptions.map((opt) => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 pt-6 border-t border-dark/5 flex justify-between items-center">
+                    <div className="flex gap-4">
+                       <span className="flex items-center gap-1.5 text-xs font-bold text-dark/40 uppercase">
+                          <Calendar size={14} className="text-red-primary" /> {format(new Date(order.delivery_date), 'MMM d')}
+                       </span>
+                       <span className="flex items-center gap-1.5 text-xs font-bold text-dark/40 uppercase">
+                          <Clock size={14} className="text-red-primary" /> {order.delivery_slot}
+                       </span>
+                    </div>
+                    <Link 
+                      href={`/profile/orders/${order.id}`}
+                      className="text-xs font-bold text-dark/60 hover:text-dark flex items-center gap-1.5 transition-colors"
+                    >
+                      View Details <Eye size={14} />
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
+  );
+}
+
+function Calendar({ size, className }: { size: number, className?: string }) {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      className={className}
+    >
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+      <line x1="16" y1="2" x2="16" y2="6"></line>
+      <line x1="8" y1="2" x2="8" y2="6"></line>
+      <line x1="3" y1="10" x2="21" y2="10"></line>
+    </svg>
   );
 }
