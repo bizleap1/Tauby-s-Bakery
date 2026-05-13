@@ -2,6 +2,7 @@
 
 import React, { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { KeyRound, Mail, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";

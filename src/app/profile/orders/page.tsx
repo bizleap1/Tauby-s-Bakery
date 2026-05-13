@@ -2,14 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Package, ChevronRight, Clock, CheckCircle2, Truck, AlertCircle } from "lucide-react";
+import { Package, ChevronRight, Clock, CheckCircle2, Truck } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { formatPrice } from "@/lib/utils";
 import { format } from "date-fns";
 
+import { Order, OrderItem } from "@/types";
+
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export default function OrdersPage() {
                     <div className="flex-grow">
                       <p className="text-sm text-dark/60 mb-2">Items</p>
                       <div className="flex gap-2 overflow-hidden">
-                        {order.order_items.map((item: any, i: number) => (
+                        {order.order_items.map((item: OrderItem, i: number) => (
                           <div key={i} className="text-sm font-medium text-dark">
                             {item.quantity}x Item {i+1}{i < order.order_items.length - 1 ? ',' : ''}
                           </div>

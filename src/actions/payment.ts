@@ -4,6 +4,8 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import { createClient } from "@/utils/supabase/server";
 
+import { CartItem } from "@/types";
+
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || "",
   key_secret: process.env.RAZORPAY_KEY_SECRET || "",
@@ -29,7 +31,7 @@ export async function verifyRazorpayPayment(
   razorpayPaymentId: string,
   signature: string,
   orderData: {
-    items: any[];
+    items: CartItem[];
     total: number;
     address: string;
     pincode: string;

@@ -9,10 +9,12 @@ import { motion } from "framer-motion";
 import { formatPrice } from "@/lib/utils";
 import { format } from "date-fns";
 
+import { Order } from "@/types";
+
 export default function OrderDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
-  const [order, setOrder] = useState<any>(null);
+  const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

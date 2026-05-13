@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Plus, Star } from "lucide-react";
-import { motion } from "framer-motion";
 import { formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {

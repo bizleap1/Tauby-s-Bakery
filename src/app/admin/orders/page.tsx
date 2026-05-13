@@ -2,15 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Package, Truck, CheckCircle2, Clock, Filter, Search, ChevronRight, Eye } from "lucide-react";
+import { Package, Truck, CheckCircle2, Clock, Filter, Search, ChevronRight, Eye, Calendar } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { formatPrice } from "@/lib/utils";
 import { format } from "date-fns";
 import { toast } from "react-hot-toast";
 
+import { Order } from "@/types";
+
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState("All");
 
@@ -165,27 +167,5 @@ export default function AdminOrdersPage() {
         )}
       </div>
     </div>
-  );
-}
-
-function Calendar({ size, className }: { size: number, className?: string }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-      <line x1="16" y1="2" x2="16" y2="6"></line>
-      <line x1="8" y1="2" x2="8" y2="6"></line>
-      <line x1="3" y1="10" x2="21" y2="10"></line>
-    </svg>
   );
 }
