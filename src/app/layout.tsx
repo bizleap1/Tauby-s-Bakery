@@ -51,7 +51,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
-      <body className={`${playfair.variable} ${poppins.variable} font-body bg-cream text-dark min-h-full flex flex-col antialiased`}>
+      <body 
+        className={`${playfair.variable} ${poppins.variable} font-body bg-cream text-dark min-h-full flex flex-col antialiased`}
+        suppressHydrationWarning
+      >
         <Toaster position="top-center" />
         <Navbar />
         <main className="flex-grow">

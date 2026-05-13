@@ -11,9 +11,14 @@ function VerifyContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const [email, setEmail] = useState(searchParams.get("email") || "");
+  const [email, setEmail] = useState("");
   const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  React.useEffect(() => {
+    const emailParam = searchParams.get("email");
+    if (emailParam) setEmail(emailParam);
+  }, [searchParams]);
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();

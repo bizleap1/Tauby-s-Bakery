@@ -214,19 +214,21 @@ export default function Navbar() {
               </button>
               
               <div className="relative" ref={profileRef}>
-                {user ? (
-                  <button 
-                    onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className="flex items-center gap-2 text-dark hover:text-red-primary transition-colors"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-red-primary/10 flex items-center justify-center text-red-primary border border-red-primary/20">
-                      <User size={18} />
-                    </div>
-                  </button>
-                ) : (
-                  <Link href="/login" className="text-dark hover:text-red-primary transition-colors" aria-label="Account">
-                    <User size={20} />
-                  </Link>
+                {mounted && (
+                  user ? (
+                    <button 
+                      onClick={() => setIsProfileOpen(!isProfileOpen)}
+                      className="flex items-center gap-2 text-dark hover:text-red-primary transition-colors"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-red-primary/10 flex items-center justify-center text-red-primary border border-red-primary/20">
+                        <User size={18} />
+                      </div>
+                    </button>
+                  ) : (
+                    <Link href="/login" className="text-dark hover:text-red-primary transition-colors" aria-label="Account">
+                      <User size={20} />
+                    </Link>
+                  )
                 )}
 
                 <AnimatePresence>
