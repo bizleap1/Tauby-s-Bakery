@@ -20,6 +20,28 @@ function VerifyContent() {
     if (emailParam) setEmail(emailParam);
   }, [searchParams]);
 
+  const handleSendOtp = async () => {
+    if (!email) {
+      toast.error("Please enter your email address first");
+      return;
+    }
+    
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: window.location.origin,
+      },
+    });
+
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Verification code sent to your email!");
+    }
+    setIsLoading(false);
+  };
+
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !token) {
@@ -73,7 +95,16 @@ function VerifyContent() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-widest text-chocolate/40">Verification Code</label>
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-bold uppercase tracking-widest text-chocolate/40">Verification Code</label>
+                <button 
+                  type="button"
+                  onClick={handleSendOtp}
+                  className="text-[10px] font-bold text-pink-deep hover:underline uppercase tracking-tighter"
+                >
+                  Send Code
+                </button>
+              </div>
               <div className="relative">
                 <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 text-chocolate/20" size={18} />
                 <input
@@ -98,13 +129,8 @@ function VerifyContent() {
           </form>
 
           <p className="mt-8 text-center text-sm text-chocolate-light">
-            Didn&apos;t receive a code?{" "}
-            <button 
-              onClick={() => toast.success("Please try signing in again to resend code")}
-              className="text-pink-deep font-bold hover:underline"
-            >
-              Resend
-            </button>
+            Need an account?{" "}
+            <Link href="/register" className="text-pink-deep font-bold hover:underline">Register</Link>
           </p>
         </div>
       </motion.div>
